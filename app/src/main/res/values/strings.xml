@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">SSDProject</string>
+    <string name="header_text">Move!</string>
+    <string name="strength_button">strength</string>
+    <string name="yoga_button">yoga</string>
+    <string name="strength_text">Strength</string>
+    <string name="yoga_text">Yoga/Stretches</string>
+    <string name="yoga_toggle">Yoga Toggle</string>
+    <string name="strength_toggle">Strength Toggle</string>
+    <string name="go_button">Go!</string>
 </resources>
