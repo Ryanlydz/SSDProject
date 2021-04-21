@@ -8,4 +8,6 @@
     <string name="yoga_toggle">Yoga Toggle</string>
     <string name="strength_toggle">Strength Toggle</string>
     <string name="go_button">Go!</string>
+    <string name="channel_description">notification channel</string>
+    <string name="channel_name">mychannel</string>
 </resources>

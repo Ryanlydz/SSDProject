@@ -71,7 +71,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ToggleButton
-        android:id="@+id/toggleButton"
+        android:id="@+id/strength_toggle"
         android:layout_width="84dp"
         android:layout_height="44dp"
         android:layout_marginStart="62dp"
@@ -86,7 +86,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_strength" />
 
     <ToggleButton
-        android:id="@+id/toggleButton2"
+        android:id="@+id/yoga_toggle"
         android:layout_width="84dp"
         android:layout_height="44dp"
         android:layout_marginTop="4dp"
