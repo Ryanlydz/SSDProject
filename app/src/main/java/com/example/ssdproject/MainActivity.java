@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     DetectedActivityReceiver receiver;
     PendingIntent pendingIntent;
     String selectedExercises[] = {"Initial"};
-    Timer timer = new Timer("Activity Timer");
+    Timer timer;
     final String[] strengthExercises = {
         "20 Jumping Jacks", "10 Push-Ups", "15 Sit Ups", "15 Crunches"
     };
@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Set up timer
+        timer = new Timer("Activity Timer");
         TimerTask timerTask = new TimerTask() {
             public void run() {
                 // Randomly select exercise from the list
@@ -203,10 +204,10 @@ public class MainActivity extends AppCompatActivity {
         monitoring_view.setVisibility(View.INVISIBLE);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
-
+        TextView suggestedExercise_Test = (TextView) findViewById(R.id.suggestedExercise_text);
+        suggestedExercise_Test.setText("");
         // Stop executing tasks from timer
-        timer.purge();
-
+        timer.cancel();
         // Stop monitoring activity
         stopActivityRecognition();
     }
