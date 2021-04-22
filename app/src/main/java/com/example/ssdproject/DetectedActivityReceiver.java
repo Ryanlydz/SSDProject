@@ -35,8 +35,9 @@ public class DetectedActivityReceiver extends BroadcastReceiver{
                 int transition = event.getTransitionType();
                 String message = "Transition: " + activity + " " + transition;
 
-                //Here is where the 60 minute timer would be reset, not feasible for demo
-
+                //Here is where the 60 minute timer would be reset
+                // NOT FOR DEMO
+                // timer.cancel();
             }
         }
     }
