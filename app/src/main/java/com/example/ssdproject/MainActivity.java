@@ -14,6 +14,12 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.ActivityTransition;
@@ -26,6 +32,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String CHANNEL_ID = "1";
     DetectedActivityReceiver receiver;
     PendingIntent pendingIntent;
+    final String[] strengthExercises = {
+        "20 Jumping Jacks", "10 Push-Ups", "15 Sit Ups", "15 Crunches"
+    };
+    final String[] yogaExercises = {
+            "30 sec Down Dog", "30 sec Cat Cow Pose", "20 sec Back Bend", " 25 sec Forward Fold"
+    };
+
 
     public void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -51,10 +65,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         createNotificationChannel();
@@ -62,9 +72,68 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+    }
+
+    public void go_buttonClicked(View view) {
+        // Array for selected exercises
+        String selectedExercises[] = {"Initial"};
+
+        // Get toggle buttons
+        ToggleButton strength_toggle = (ToggleButton) findViewById(R.id.strength_toggle);
+        ToggleButton yoga_toggle = (ToggleButton) findViewById(R.id.yoga_toggle);
+        TextView bothSelected = (TextView) findViewById(R.id.bothSelected);
+        if(strength_toggle.isChecked()){
+            selectedExercises = strengthExercises;
+            bothSelected.setVisibility(View.INVISIBLE);
+        }
+        if(strength_toggle.isChecked() && yoga_toggle.isChecked()){
+                bothSelected.setVisibility(View.VISIBLE);
+            return;
+        }
+        if(yoga_toggle.isChecked()){
+            selectedExercises = yogaExercises;
+            bothSelected.setVisibility(View.INVISIBLE);
+        }
+        if(!yoga_toggle.isChecked() && !strength_toggle.isChecked()){
+            bothSelected.setVisibility(View.VISIBLE);
+            return;
+        }
+        // Hide go button, show stop button
+        Button go_button = (Button) findViewById(R.id.go_button);
+        go_button.setVisibility(View.INVISIBLE);
+        Button stop_button = (Button) findViewById(R.id.stop_button);
+        stop_button.setVisibility(View.VISIBLE);
+        // Get progress bar and text view
+        TextView monitoring_view = (TextView) findViewById(R.id.monitoring_view);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        TextView suggestedExercise_Test = (TextView) findViewById(R.id.suggestedExercise_text);
+
+        // Randomly select exercise from the list
+        Random random = new Random();
+        int random_int = random.nextInt(selectedExercises.length);
+        String random_exercise = selectedExercises[random_int];
+        // Set up notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.run)
+                .setContentTitle("It's time to Move!")
+                .setContentText("Do " + random_exercise + "!")
+                .setPriority(NotificationCompat.PRIORITY_MAX);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        // Set up timer
+        TimerTask timerTask = new TimerTask() {
+            public void run() {
+                // Display notification
+                notificationManager.notify(1, builder.build());
+                suggestedExercise_Test.setText("Suggested Exercise: " + random_exercise);
+            }
+        };
+        Timer timer = new Timer("Activity Timer");
+        long delay = 3000;
+        timer.schedule(timerTask, delay);
+
         // Create a list of activities
         List<ActivityTransition> transitions = new ArrayList<>();
-
         //Walking
         transitions.add(
                 new ActivityTransition.Builder()
@@ -91,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
         pendingIntent = PendingIntent.getBroadcast(this, 0, intent,0);
 
-         receiver = new DetectedActivityReceiver();
+        receiver = new DetectedActivityReceiver();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter(DetectedActivityReceiver.RECEIVER_ACTION));
 
@@ -102,7 +171,9 @@ public class MainActivity extends AppCompatActivity {
                 new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void result) {
-                       Log.d("ActivityRecognition:","Transitions API successfully registered");
+                        Log.d("ActivityRecognition:","Transitions API successfully registered");
+                    progressBar.setVisibility(View.VISIBLE);
+                    monitoring_view.setVisibility(View.VISIBLE);
                     }
                 }
         );
@@ -112,29 +183,26 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Exception e) {
                         Log.d("ActivityRecognition:","Transitions API registration has failed");
+                        progressBar.setVisibility(View.INVISIBLE);
+                        monitoring_view.setVisibility(View.INVISIBLE);
                     }
                 }
         );
+    }
+    public void stop_buttonClicked(View view) {
+        // Hide go button, show stop button
+        Button go_button = (Button) findViewById(R.id.go_button);
+        go_button.setVisibility(View.VISIBLE);
+        Button stop_button = (Button) findViewById(R.id.stop_button);
+        stop_button.setVisibility(View.INVISIBLE);
+        // Show progress bar and textview
+        TextView monitoring_view = (TextView) findViewById(R.id.monitoring_view);
+        monitoring_view.setVisibility(View.INVISIBLE);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
 
-        // Set up notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.run)
-                .setContentTitle("It's time to Move!")
-                .setContentText("Do 20 jumping jacks!")
-                .setPriority(NotificationCompat.PRIORITY_MAX);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        // Set up timer
-        TimerTask timerTask = new TimerTask() {
-            public void run() {
-                // Display notification
-                notificationManager.notify(1, builder.build());
-                System.out.println("Notification should have displayed!");
-            }
-        };
-        Timer timer = new Timer("Activity Timer");
-        long delay = 2000;
-        timer.schedule(timerTask, delay);
+        // Stop monitoring activity
+        stopActivityRecognition();
     }
 
     private void stopActivityRecognition(){
@@ -162,4 +230,6 @@ public class MainActivity extends AppCompatActivity {
         );
 
     }
+
+
 }

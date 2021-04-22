@@ -35,17 +35,8 @@ public class DetectedActivityReceiver extends BroadcastReceiver{
                 int transition = event.getTransitionType();
                 String message = "Transition: " + activity + " " + transition;
 
-                // Send notification
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.strength)
-                        .setContentTitle("It's time to Move!")
-                        .setContentText("Do 20 jumping jacks!")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                //Here is where the 60 minute timer would be reset, not feasible for demo
 
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-
-                // Display notification
-                notificationManager.notify(1, builder.build());
             }
         }
     }

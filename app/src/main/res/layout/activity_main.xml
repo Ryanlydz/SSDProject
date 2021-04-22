@@ -80,8 +80,8 @@
         android:background="#CAC7F6"
         android:text="@string/strength_toggle"
         android:textColor="#673AB7"
-        android:textOff="Select"
-        android:textOn="Select"
+        android:textOff="Off"
+        android:textOn="On"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_strength" />
 
@@ -95,8 +95,8 @@
         android:background="#DC8F8F"
         android:text="@string/yoga_toggle"
         android:textColor="#FFFFFF"
-        android:textOff="Select"
-        android:textOn="Select"
+        android:textOff="Off"
+        android:textOn="On"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_yoga" />
 
@@ -105,12 +105,88 @@
         android:layout_width="109dp"
         android:layout_height="66dp"
         android:layout_marginBottom="120dp"
+        android:onClick="go_buttonClicked"
         android:text="Go!"
         android:textColor="#FFFFFF"
         app:backgroundTint="@color/purple_200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/stop_button"
+        android:layout_width="109dp"
+        android:layout_height="66dp"
+        android:layout_marginBottom="120dp"
+        android:onClick="stop_buttonClicked"
+        android:text="Stop"
+        android:textColor="#FFFFFF"
+        android:visibility="invisible"
+        app:backgroundTint="@color/purple_500"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/monitoring_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="Now monitoring activity!"
+        android:textColor="#00BCD4"
+        android:textColorHighlight="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/go_button" />
+
+    <TextView
+        android:id="@+id/bothSelected"
+        android:layout_width="220dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="20dp"
+        android:text="Select one of the two excercise categories"
+        android:textColor="#00BCD4"
+        android:textColorHighlight="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.654"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/go_button" />
+
+    <TextView
+        android:id="@+id/suggestedExercise_text"
+        android:layout_width="177dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="85dp"
+        android:layout_marginBottom="24dp"
+        android:textColor="#00BCD4"
+        android:textColorHighlight="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/go_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.542"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_yoga" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
