@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String CHANNEL_ID = "1";
     DetectedActivityReceiver receiver;
     PendingIntent pendingIntent;
+    String selectedExercises[] = {"Initial"};
+    Timer timer = new Timer("Activity Timer");
     final String[] strengthExercises = {
         "20 Jumping Jacks", "10 Push-Ups", "15 Sit Ups", "15 Crunches"
     };
@@ -76,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void go_buttonClicked(View view) {
         // Array for selected exercises
-        String selectedExercises[] = {"Initial"};
 
         // Get toggle buttons
         ToggleButton strength_toggle = (ToggleButton) findViewById(R.id.strength_toggle);
@@ -108,29 +109,31 @@ public class MainActivity extends AppCompatActivity {
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         TextView suggestedExercise_Test = (TextView) findViewById(R.id.suggestedExercise_text);
 
-        // Randomly select exercise from the list
-        Random random = new Random();
-        int random_int = random.nextInt(selectedExercises.length);
-        String random_exercise = selectedExercises[random_int];
-        // Set up notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.run)
-                .setContentTitle("It's time to Move!")
-                .setContentText("Do " + random_exercise + "!")
-                .setPriority(NotificationCompat.PRIORITY_MAX);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         // Set up timer
         TimerTask timerTask = new TimerTask() {
             public void run() {
+                // Randomly select exercise from the list
+                Random random = new Random();
+                int random_int = random.nextInt(selectedExercises.length);
+                String random_exercise = selectedExercises[random_int];
+                // Set up notification
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                        .setSmallIcon(R.drawable.run)
+                        .setContentTitle("It's time to Move!")
+                        .setContentText("Do " + random_exercise + "!")
+                        .setPriority(NotificationCompat.PRIORITY_MAX);
+
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+
                 // Display notification
                 notificationManager.notify(1, builder.build());
                 suggestedExercise_Test.setText("Suggested Exercise: " + random_exercise);
             }
         };
-        Timer timer = new Timer("Activity Timer");
-        long delay = 3000;
-        timer.schedule(timerTask, delay);
+        long delay = 15000;
+        long interval = 7000;
+        timer.scheduleAtFixedRate(timerTask, delay, interval);
 
         // Create a list of activities
         List<ActivityTransition> transitions = new ArrayList<>();
@@ -200,6 +203,9 @@ public class MainActivity extends AppCompatActivity {
         monitoring_view.setVisibility(View.INVISIBLE);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
+
+        // Stop executing tasks from timer
+        timer.purge();
 
         // Stop monitoring activity
         stopActivityRecognition();
